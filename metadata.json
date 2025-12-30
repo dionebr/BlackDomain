@@ -1,0 +1,205 @@
+{
+    "id": "blackdomain",
+    "name": "BlackDomain",
+    "category": "Network",
+    "difficulty": "Medium",
+    "description": "Ambiente Active Directory completo para CTF com múltiplas vulnerabilidades realistas",
+    "tags": [
+        "Active Directory",
+        "Windows",
+        "Kerberos",
+        "SMB",
+        "SIEM",
+        "Network"
+    ],
+    "flags": 7,
+    "flag_format": "XACK{md5_hash}",
+    "author": "XACK Team",
+    "version": "1.0.0",
+    "created_at": "2024-12-30",
+    "updated_at": "2024-12-30",
+    "infrastructure": {
+        "type": "Vagrant + VirtualBox",
+        "vms": 4,
+        "total_ram_gb": 7,
+        "total_cpus": 8,
+        "estimated_disk_gb": 60
+    },
+    "network": {
+        "servers_subnet": "10.10.10.0/24",
+        "workstations_subnet": "10.10.20.0/24",
+        "isolated": true
+    },
+    "hosts": [
+        {
+            "hostname": "DC01",
+            "ip": "10.10.10.10",
+            "os": "Windows Server 2019",
+            "role": "Domain Controller",
+            "services": [
+                "AD DS",
+                "DNS",
+                "SMB"
+            ],
+            "ram_mb": 2048,
+            "cpus": 2
+        },
+        {
+            "hostname": "WS01",
+            "ip": "10.10.20.11",
+            "os": "Windows 10",
+            "role": "Workstation",
+            "services": [
+                "IIS",
+                "WinRM"
+            ],
+            "ram_mb": 2048,
+            "cpus": 2
+        },
+        {
+            "hostname": "WS02",
+            "ip": "10.10.20.12",
+            "os": "Windows 10",
+            "role": "Workstation",
+            "services": [
+                "SQL Express (simulated)",
+                "WinRM"
+            ],
+            "ram_mb": 2048,
+            "cpus": 2
+        },
+        {
+            "hostname": "LogServer",
+            "ip": "10.10.10.20",
+            "os": "Ubuntu 22.04",
+            "role": "SIEM",
+            "services": [
+                "Wazuh",
+                "Docker"
+            ],
+            "ram_mb": 1024,
+            "cpus": 2
+        }
+    ],
+    "vulnerabilities": [
+        {
+            "name": "Domain Enumeration",
+            "mitre_attack": [
+                "T1087.002",
+                "T1018"
+            ],
+            "description": "LDAP anonymous bind and SMB null sessions enabled"
+        },
+        {
+            "name": "SMB Shares Misconfiguration",
+            "mitre_attack": [
+                "T1021.002",
+                "T1039"
+            ],
+            "description": "Shares with excessive permissions"
+        },
+        {
+            "name": "Password Spraying",
+            "mitre_attack": [
+                "T1110.003"
+            ],
+            "description": "No account lockout policy, weak passwords"
+        },
+        {
+            "name": "Kerberoasting",
+            "mitre_attack": [
+                "T1558.003"
+            ],
+            "description": "Service account with SPN and weak password"
+        },
+        {
+            "name": "AS-REP Roasting",
+            "mitre_attack": [
+                "T1558.004"
+            ],
+            "description": "User without Kerberos pre-authentication"
+        },
+        {
+            "name": "SeBackupPrivilege Abuse",
+            "mitre_attack": [
+                "T1003.003"
+            ],
+            "description": "Backup Operators group membership"
+        },
+        {
+            "name": "GPP Passwords (MS14-025)",
+            "mitre_attack": [
+                "T1552.006"
+            ],
+            "description": "Credentials in SYSVOL Groups.xml"
+        },
+        {
+            "name": "Credentials in Clear Text",
+            "mitre_attack": [
+                "T1552.001",
+                "T1139"
+            ],
+            "description": "Passwords in files and PowerShell history"
+        },
+        {
+            "name": "Lateral Movement",
+            "mitre_attack": [
+                "T1021.006",
+                "T1550.002"
+            ],
+            "description": "WinRM enabled, Pass-the-Hash allowed"
+        }
+    ],
+    "learning_objectives": [
+        "Active Directory enumeration techniques",
+        "Kerberos attacks (Kerberoasting, AS-REP Roasting)",
+        "SMB exploitation and lateral movement",
+        "Privilege escalation in Windows domains",
+        "SIEM log analysis with Wazuh",
+        "Post-exploitation and persistence"
+    ],
+    "prerequisites": {
+        "knowledge": [
+            "Basic networking",
+            "Windows fundamentals",
+            "Linux basics"
+        ],
+        "tools": [
+            "VirtualBox 7.0+",
+            "Vagrant 2.4+",
+            "Git"
+        ],
+        "hardware": {
+            "ram_gb_min": 8,
+            "ram_gb_recommended": 12,
+            "cpu_cores_min": 4,
+            "disk_gb": 60
+        }
+    },
+    "estimated_time": {
+        "setup_minutes": 45,
+        "completion_hours": "4-8"
+    },
+    "files": {
+        "main": "Vagrantfile",
+        "provisioning": [
+            "provisioning/dc_setup.ps1",
+            "provisioning/ws_setup.ps1",
+            "provisioning/logserver_setup.sh"
+        ],
+        "documentation": [
+            "README.md",
+            "VULNERABILITIES.md",
+            "NETWORK_DIAGRAM.md",
+            "LICENSE"
+        ],
+        "scripts": [
+            "scripts/validate_setup.ps1"
+        ]
+    },
+    "references": [
+        "https://github.com/christophetd/Adaz",
+        "https://attack.mitre.org/",
+        "https://book.hacktricks.xyz/windows-hardening/active-directory-methodology"
+    ]
+}

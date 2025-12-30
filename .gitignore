@@ -1,0 +1,49 @@
+# Ignore Vagrant files
+.vagrant/
+*.box
+
+# Ignore VirtualBox files
+*.vdi
+*.vmdk
+*.vbox
+*.vbox-prev
+
+# Ignore logs
+*.log
+vagrant.log
+
+# Ignore OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Ignore temporary files
+*.tmp
+*.temp
+~*
+
+# Ignore sensitive files
+*.pem
+*.key
+*.crt
+id_rsa*
+
+# Ignore backup files
+*.bak
+*.backup
+*~
+
+# Ignore IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Ignore Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Ignore custom configs (podem conter senhas)
+custom_config.yml
+secrets.yml
