@@ -95,6 +95,9 @@ $GroupsXML = @"
 "@
 $GroupsXML | Out-File -FilePath "$GPPPath\Groups.xml" -Encoding UTF8
 
+# FLAG 3: GPP / SYSVOL - XACK{eccbc87e4b5ce2fe28308fd9f2a7baf3} (md5 de "3")
+New-Item -Path "$GPPPath\flag3.txt" -Value "XACK{eccbc87e4b5ce2fe28308fd9f2a7baf3}" -Force | Out-Null
+
 # Política de auditoria fraca
 Write-Host "[+] Configurando políticas fracas..." -ForegroundColor Green
 auditpol /set /category:"Logon/Logoff" /success:disable /failure:disable | Out-Null
